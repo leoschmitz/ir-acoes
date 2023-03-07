@@ -1,8 +1,6 @@
 # ir-acoes
 
-This is my personal stock taxex calculator.
-
-It only makes sense for residents of Brazil.
+This is my personal tax calculator for stocks. It only makes sense for **residents of Brazil**. 
 
 # Calculadora de imposto de renda (ações)
 
@@ -19,7 +17,7 @@ Scripts para ajudar no cálculo do Imposto de Renda.
   - exportar em formato Excel
 - preencher as posições anteriores em 'posicoes-iniciais.json', se você entrou no ano comprado
 Exemplo:
-
+```
 {
   "PETR4": {
       "preco-medio": "10.45135712",
@@ -30,6 +28,6 @@ Exemplo:
       "quantidade": "3000"
   }
 }
-
+```
 - criar um novo venv
 - pip install -r requirements.txt
