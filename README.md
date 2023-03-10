@@ -29,5 +29,6 @@ Exemplo:
   }
 }
 ```
+- caso você não possua nenhuma ação no ano anterior, apenas deixe o **JSON vazio**
 - criar um novo venv
 - pip install -r requirements.txt
