@@ -7,6 +7,7 @@ logging.basicConfig(
 )
 
 from file_loaders import load_input_file
+from file_loaders import load_b3_file
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ logger = logging.getLogger(__name__)
 def run():
     logger.info('Loading input files')
     load_input_file('posicoes-iniciais.json')
+    load_b3_file()
 
 
 if __name__ == '__main__':

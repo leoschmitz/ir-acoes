@@ -15,6 +15,7 @@ Scripts para ajudar no cálculo do Imposto de Renda.
   - filtrar por primeiro dia 01/Jan a 31/Dez
   - filtrar por compra e venda de ações
   - exportar em formato Excel
+  - mover o arquivo para a pasta raiz do projeto
 - preencher as posições anteriores em 'posicoes-iniciais.json', se você entrou no ano comprado
 Exemplo:
 ```
