@@ -31,8 +31,17 @@ def load_input_file(filename):
 
 
 def _parse_b3_file(filename):
-    workbook = load_workbook(filename, read_only=True)
-    logger.info('%s', workbook)
+    logger.info('parsing %s', filename)
+    workbook = load_workbook(filename)
+    worksheet = workbook['Negociação']
+    rows = iter(worksheet.rows)
+    logger.info('Loading -> %s', ', '.join([title.value for title in next(rows)]))
+    for row in rows:
+        for cell in row:
+            print(cell.value)
+        break
+    workbook.close()
+    return None
 
 
 def load_b3_file():
@@ -44,4 +53,4 @@ def load_b3_file():
 
     assert len(xlsx_filenames) == 1
 
-    _parse_b3_file(xlsx_filenames[0])
+    return _parse_b3_file(xlsx_filenames[0])

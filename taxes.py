@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 def run():
     logger.info('Loading input files')
-    load_input_file('posicoes-iniciais.json')
-    load_b3_file()
+    prev_year = load_input_file('posicoes-iniciais.json')
+    workbook = load_b3_file()
 
 
 if __name__ == '__main__':
