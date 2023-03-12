@@ -8,6 +8,10 @@ class Operation:
     price: float
     date: datetime.date
 
+    @property
+    def total(self):
+        return round(self.price * self.quantity, 6)
+
 
 class Buy(Operation):
     """Buy op"""

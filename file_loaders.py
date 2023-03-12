@@ -60,28 +60,26 @@ def _parse_b3_file(filename):
 
     stocks = {}
     for row in rows:
-        operation = [cell.value for cell in row]
-        logger.debug(operation)
+        row = [cell.value for cell in row]
+        logger.debug(row)
 
-        op_type = operation[col.type_].upper()
+        op_type = row[col.type_].upper()
         assert op_type in ('VENDA', 'COMPRA')
 
-        date = operation[col.date]
-        date = datetime.strptime(operation[col.date], '%d/%m/%Y').date()
+        date = row[col.date]
+        date = datetime.strptime(row[col.date], '%d/%m/%Y').date()
 
-        quantity = operation[col.quantity]
+        quantity = row[col.quantity]
         assert isinstance(quantity, int)
-
-        price = float(operation[col.price])
-        assert round(quantity * price, 5) == operation[col.total]
-
-        code = operation[col.code]
+        price = float(row[col.price])
+        code = row[col.code]
 
         if op_type == 'COMPRA':
             operation = Buy(code, quantity, price, date)
         else:
             operation = Sell(code, quantity, price, date)
 
+        assert operation.total == row[col.total]
         if operation.stock not in stocks:
             stocks[operation.stock] = [operation]
         else:
