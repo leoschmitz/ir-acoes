@@ -8,14 +8,16 @@ logging.basicConfig(
 
 from file_loaders import load_input_file
 from file_loaders import load_b3_file
+from check import averages
 
 logger = logging.getLogger(__name__)
 
 
 def run():
     logger.info('Loading input files')
-    prev_year = load_input_file('posicoes-iniciais.json')
-    workbook = load_b3_file()
+    prev_stocks = load_input_file('posicoes-iniciais.json')
+    current_stocks = load_b3_file()
+    averages(current_stocks)
 
 
 if __name__ == '__main__':

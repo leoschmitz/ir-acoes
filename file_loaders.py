@@ -5,7 +5,8 @@ import json
 from datetime import datetime
 from enum import IntEnum
 from openpyxl import load_workbook
-
+from data import Buy
+from data import Sell
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +40,7 @@ class col(IntEnum):
     code = 5
     quantity = 6
     price = 7
+    total = 8
 
 
 def _parse_b3_file(filename):
@@ -59,6 +61,7 @@ def _parse_b3_file(filename):
     stocks = {}
     for row in rows:
         operation = [cell.value for cell in row]
+        logger.debug(operation)
 
         op_type = operation[col.type_].upper()
         assert op_type in ('VENDA', 'COMPRA')
@@ -70,14 +73,19 @@ def _parse_b3_file(filename):
         assert isinstance(quantity, int)
 
         price = float(operation[col.price])
-
-        values = [op_type, date, quantity, price]
+        assert round(quantity * price, 5) == operation[col.total]
 
         code = operation[col.code]
-        if code not in stocks:
-            stocks[code] = [values]
+
+        if op_type == 'COMPRA':
+            operation = Buy(code, quantity, price, date)
         else:
-            stocks[code].append(values)
+            operation = Sell(code, quantity, price, date)
+
+        if operation.stock not in stocks:
+            stocks[operation.stock] = [operation]
+        else:
+            stocks[operation.stock].append(operation)
 
     workbook.close()
     return stocks
