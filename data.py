@@ -46,14 +46,6 @@ class MonthlyBucket:
             sum_ += op.quantity
         return sum_
 
-    @property
-    def average(self):
-        quantity = self.quantity
-        if not quantity:
-            return 0.0
-
-        return self.total / quantity
-
 
 @dataclass
 class Monthly:
@@ -61,13 +53,21 @@ class Monthly:
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
 
+    @property
+    def average(self, month):
+        quantity = self.quantity
+        if not quantity:
+            return 0.0
+
+        return self.total / quantity
+
 
 def build_year():
     return [Monthly(i) for i in range(1, 13)]
 
 
 @dataclass
-class Year:
+class YearOperations:
     stock: str
     months: List[Monthly] = field(default_factory=build_year)
 
@@ -85,7 +85,6 @@ class Year:
             year_ops.months[index_month].sell.ops.append(operation)
 
         return year_ops
-
 
     def total(self, operation_type):
         sum_ = 0.0

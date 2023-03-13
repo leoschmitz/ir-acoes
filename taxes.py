@@ -8,7 +8,7 @@ logging.basicConfig(
 
 from file_loaders import load_input_file
 from file_loaders import load_b3_file
-from check import averages
+from report import Report
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,8 @@ def run():
     logger.info('Loading input files')
     prev_stocks = load_input_file('posicoes-iniciais.json')
     current_stocks = load_b3_file()
-    averages(current_stocks)
+    report = Report(prev_stocks, current_stocks)
+    report.execute()
 
 
 if __name__ == '__main__':
