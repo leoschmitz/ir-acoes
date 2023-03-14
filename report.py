@@ -17,7 +17,7 @@ class Report:
         for stock, operations in self.b3input.items():
             logger.info('--------------')
             logger.info('Averaging %s', stock)
-            year = YearOperations.from_operations(operations)
+            year = YearOperations(operations)
             logger.info('buy %s sell %s', year.average('BUY'), year.average('SELL'))
             all_operations.append(year)
         for month in range(12):

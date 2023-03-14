@@ -62,29 +62,18 @@ class Monthly:
         return self.total / quantity
 
 
-def build_year():
-    return [Monthly(i) for i in range(1, 13)]
-
-
-@dataclass
 class YearOperations:
-    stock: str
-    months: List[Monthly] = field(default_factory=build_year)
-
-    @classmethod
-    def from_operations(cls, operations):
+    def __init__(self, operations):
         logger.info('Total operations %s', len(operations))
-
-        year_ops = cls(operations[0].stock)
+        self.stock = operations[0].stock
+        self.months = [Monthly(i) for i in range(1, 13)]
 
         for operation in operations:
             index_month = operation.date.month - 1
             if isinstance(operation, Buy):
-                year_ops.months[index_month].buy.ops.append(operation)
+                self.months[index_month].buy.ops.append(operation)
                 continue
-            year_ops.months[index_month].sell.ops.append(operation)
-
-        return year_ops
+            self.months[index_month].sell.ops.append(operation)
 
     def total(self, operation_type):
         sum_ = 0.0
