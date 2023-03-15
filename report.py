@@ -16,10 +16,16 @@ class Report:
         all_operations = []
         for stock, operations in self.b3input.items():
             logger.info('--------------')
-            logger.info('Averaging %s', stock)
-            year = YearOperations(operations)
-            logger.info('buy %s sell %s', year.average('BUY'), year.average('SELL'))
+            logger.info('Reporting for %s', stock)
+            input_ = self.current.get(stock, {})
+            logger.info('Input: %s', input_)
+            logger.info('Total operations %s', len(operations))
+            year = YearOperations(input_, operations)
+            logger.info(
+                'buy %s sell %s', year.accumulated_average('BUY'),
+                year.accumulated_average('SELL'))
             all_operations.append(year)
+
         for month in range(12):
             sold = 0.0
             for stock_ops in all_operations:

@@ -53,20 +53,17 @@ class Monthly:
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
 
-    @property
-    def average(self, month):
-        quantity = self.quantity
-        if not quantity:
-            return 0.0
-
-        return self.total / quantity
-
 
 class YearOperations:
-    def __init__(self, operations):
-        logger.info('Total operations %s', len(operations))
+    def __init__(self, previous_year, operations):
         self.stock = operations[0].stock
         self.months = [Monthly(i) for i in range(1, 13)]
+
+        self.previous_total = 0.0
+        self.previous_quantity = 0.0
+        if previous_year:
+            self.previous_total = previous_year['total']
+            self.previous_quantity = previous_year['quantidade']
 
         for operation in operations:
             index_month = operation.date.month - 1
@@ -75,21 +72,21 @@ class YearOperations:
                 continue
             self.months[index_month].sell.ops.append(operation)
 
-    def total(self, operation_type):
-        sum_ = 0.0
-        for month in self.months:
+    def accumulated_total(self, operation_type, month=12):
+        sum_ = self.previous_total
+        for month in self.months[:month]:
             sum_ += month.buy.total if operation_type == 'BUY' else month.sell.total
         return sum_
 
-    def quantity(self, operation_type):
-        sum_ = 0
-        for month in self.months:
+    def accumulated_quantity(self, operation_type, month=12):
+        sum_ = self.previous_quantity
+        for month in self.months[:month]:
             sum_ += month.buy.quantity if operation_type == 'BUY' else month.sell.quantity
         return sum_
 
-    def average(self, operation_type):
-        quantity = self.quantity(operation_type)
+    def accumulated_average(self, operation_type, month=12):
+        quantity = self.accumulated_quantity(operation_type, month=month)
         if not quantity:
             return 0.0
 
-        return self.total(operation_type) / quantity
+        return self.accumulated_total(operation_type, month) / quantity
