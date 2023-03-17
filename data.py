@@ -72,6 +72,24 @@ class YearOperations:
                 continue
             self.months[index_month].sell.ops.append(operation)
 
+    def results(self):
+        results = [0.0] * 12
+        for month_number, month in enumerate(self.months):
+            if not month.sell.quantity:
+                continue
+            # this will start with zero, which is the correct first month (previous)
+            buy_price = (
+                self.accumulated_average('BUY', month_number) * month.sell.quantity
+            )
+
+            results[month_number] = month.sell.total - buy_price
+            logger.info(
+                'buy price %s sold total %s diff %s',
+                buy_price,
+                month.sell.total,
+                results[month_number]
+            )
+
     def accumulated_total(self, operation_type, month=12):
         sum_ = self.previous_total
         for month in self.months[:month]:
@@ -89,4 +107,4 @@ class YearOperations:
         if not quantity:
             return 0.0
 
-        return self.accumulated_total(operation_type, month) / quantity
+        return self.accumulated_total(operation_type, month=month) / quantity

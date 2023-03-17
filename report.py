@@ -22,9 +22,11 @@ class Report:
             logger.info('Total operations %s', len(operations))
             year = YearOperations(input_, operations)
             logger.info(
-                'buy %s sell %s', year.accumulated_average('BUY'),
+                'buy %s sell %s',
+                year.accumulated_average('BUY'),
                 year.accumulated_average('SELL'))
             all_operations.append(year)
+            year.results()
 
         for month in range(12):
             sold = 0.0
