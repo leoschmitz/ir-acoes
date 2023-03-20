@@ -1,4 +1,5 @@
 import logging
+from calendar import month_name
 from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
@@ -56,6 +57,9 @@ class Monthly:
 
 class YearOperations:
     def __init__(self, previous_year, operations):
+        self.accum_loss = 0.0
+        self.tax_free_profit = 0.0
+        self.operation_results = [0.0] * 12
         self.stock = operations[0].stock
         self.months = [Monthly(i) for i in range(1, 13)]
 
@@ -72,8 +76,12 @@ class YearOperations:
                 continue
             self.months[index_month].sell.ops.append(operation)
 
-    def results(self):
-        results = [0.0] * 12
+        # validate there is buy/sell at the same month
+        # this is a TODO for this script (issue #1)
+        for month in self.months:
+            assert not (month.buy.quantity and month.sell.quantity)
+
+    def calculate_loss_or_profit(self):
         for month_number, month in enumerate(self.months):
             if not month.sell.quantity:
                 continue
@@ -82,13 +90,28 @@ class YearOperations:
                 self.accumulated_average('BUY', month_number) * month.sell.quantity
             )
 
-            results[month_number] = month.sell.total - buy_price
+            result = month.sell.total - buy_price
+            assert month.sell.total < 20000.00  # TODO issue #2
             logger.info(
-                'buy price %s sold total %s diff %s',
+                'On %s sell_ops %s, buy price %s sold total %s diff %s',
+                month_name[month_number+1],
+                month.sell.quantity,
                 buy_price,
                 month.sell.total,
-                results[month_number]
+                result
             )
+            if result < 0.0:
+                self.accum_loss += result
+            else:
+                self.tax_free_profit += result
+
+            self.operation_results[month_number] = result
+
+        logger.info(
+            'Tax free profit: %s, loss: %s',
+            self.tax_free_profit,
+            self.accum_loss
+        )
 
     def accumulated_total(self, operation_type, month=12):
         sum_ = self.previous_total

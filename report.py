@@ -26,8 +26,9 @@ class Report:
                 year.accumulated_average('BUY'),
                 year.accumulated_average('SELL'))
             all_operations.append(year)
-            year.results()
+            year.calculate_loss_or_profit()
 
+        logger.info('--------------')
         for month in range(12):
             sold = 0.0
             for stock_ops in all_operations:
