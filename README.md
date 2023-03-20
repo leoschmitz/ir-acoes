@@ -21,12 +21,12 @@ Exemplo:
 ```
 {
   "PETR4": {
-      "preco-medio": "10.45135712",
-      "quantidade": "1000"
+      "total": 30151.21,
+      "quantidade": 1000
   },
   "ITUB4": {
-      "preco-medio": "21.12",
-      "quantidade": "3000"
+      "total": 6336,
+      "quantidade": 300
   }
 }
 ```
