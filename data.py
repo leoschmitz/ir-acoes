@@ -61,10 +61,11 @@ class YearOperations:
         self.tax_free_profit = 0.0
         self.operation_results = [0.0] * 12
         self.stock = operations[0].stock
+        self.year = operations[0].date.year
         self.months = [Monthly(i) for i in range(1, 13)]
 
         self.previous_total = 0.0
-        self.previous_quantity = 0.0
+        self.previous_quantity = 0
         if previous_year:
             self.previous_total = previous_year['total']
             self.previous_quantity = previous_year['quantidade']
@@ -119,15 +120,24 @@ class YearOperations:
             sum_ += month.buy.total if operation_type == 'BUY' else month.sell.total
         return sum_
 
-    def accumulated_quantity(self, operation_type, month=12):
+    def accumulated_quantity(self, operation_type='', month=12):
         sum_ = self.previous_quantity
         for month in self.months[:month]:
-            sum_ += month.buy.quantity if operation_type == 'BUY' else month.sell.quantity
+            if operation_type == 'BUY':
+                sum_ += month.buy.quantity
+            elif operation_type == 'SELL':
+                sum_ += month.sell.quantity
+
+            if not operation_type:
+                sum_ += month.buy.quantity - month.sell.quantity
         return sum_
 
-    def accumulated_average(self, operation_type, month=12):
-        quantity = self.accumulated_quantity(operation_type, month=month)
+    def accumulated_average(self, operation_type='BUY', month=12):
+        quantity = self.accumulated_quantity(operation_type=operation_type, month=month)
         if not quantity:
             return 0.0
 
-        return self.accumulated_total(operation_type, month=month) / quantity
+        return self.accumulated_total(
+            operation_type,
+            month=month
+        ) / quantity

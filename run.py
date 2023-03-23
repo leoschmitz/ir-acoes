@@ -18,7 +18,10 @@ def run():
     prev_stocks = load_input_file('posicoes-iniciais.json')
     current_stocks = load_b3_file()
     report = Report(prev_stocks, current_stocks)
-    report.execute()
+    # throws some debugging logs
+    report.prepare()
+    # prints 'Bens e Direitos'
+    report.net_worth()
 
 
 if __name__ == '__main__':
