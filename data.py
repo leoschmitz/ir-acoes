@@ -56,12 +56,12 @@ class Monthly:
 
 
 class YearOperations:
-    def __init__(self, previous_year, operations):
+    def __init__(self, stock, year, previous_year, operations):
+        self.stock = stock
+        self.year = year
         self.accum_loss = 0.0
         self.tax_free_profit = 0.0
         self.operation_results = [0.0] * 12
-        self.stock = operations[0].stock
-        self.year = operations[0].date.year
         self.months = [Monthly(i) for i in range(1, 13)]
 
         self.previous_total = 0.0

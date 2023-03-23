@@ -58,6 +58,7 @@ def _parse_b3_file(filename):
     assert 'Quantidade' == titles[col.quantity]
     assert 'Preço' == titles[col.price]
 
+    year = 0
     stocks = {}
     for row in rows:
         row = [cell.value for cell in row]
@@ -68,6 +69,10 @@ def _parse_b3_file(filename):
 
         date = row[col.date]
         date = datetime.strptime(row[col.date], '%d/%m/%Y').date()
+        # validate there is a single year in the Excel sheet
+        if not year:
+            year = date.year
+        assert year == date.year
 
         quantity = row[col.quantity]
         assert isinstance(quantity, int)
@@ -86,7 +91,7 @@ def _parse_b3_file(filename):
             stocks[operation.stock].append(operation)
 
     workbook.close()
-    return stocks
+    return {year: stocks}
 
 
 def load_b3_file():
