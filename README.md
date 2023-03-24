@@ -6,6 +6,8 @@ This is my personal tax calculator for stocks. It only makes sense for **residen
 
 Scripts para ajudar no cálculo do Imposto de Renda.
 
+**Use-os por sua conta e risco** 😆
+
 ## Passos
 
 É utilizada a linguagem Python 3.10 e os SO alvo é o Ubuntu
