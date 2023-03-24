@@ -84,7 +84,7 @@ def _parse_b3_file(filename):
         else:
             operation = Sell(code, quantity, price, date)
 
-        assert operation.total == row[col.total]
+        assert round(operation.total, 2) == round(row[col.total], 2)
         if operation.stock not in stocks:
             stocks[operation.stock] = [operation]
         else:
