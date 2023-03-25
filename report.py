@@ -97,4 +97,8 @@ class Report:
                 month = stock.months[month_number]
                 if month.has_loss:
                     loss += month.loss
-            logger.info('%s Mercado à Vista %s', month_name[month_number], round(loss, 2))
+            logger.info(
+                '%s Mercado à Vista %s',
+                month_name[month_number+1],
+                round(loss, 2),
+            )
