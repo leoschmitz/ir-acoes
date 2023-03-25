@@ -1,6 +1,7 @@
 {
     "ACAO": {
-        "preco-medio": "10.45135712",
-        "quantidade": "1000"
+        "total": 10451.36,
+        "preco-medio": 10.45135712,
+        "quantidade": 1000
     }
 }
