@@ -24,6 +24,8 @@ def run():
     report.net_worth()
     # prints 'Rendimentos isentos e não tributáveis'
     report.profit()
+    # prints 'Renda Variável - Ganhos Líquidos ou perdas em operações comuns/day-trade...'
+    report.losses()
 
 
 if __name__ == '__main__':

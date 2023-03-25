@@ -85,10 +85,16 @@ class Report:
             tax_free += year.tax_free_profit
         logger.info('Valor %s', round(tax_free, 2))
 
-#    def losses(self):
-#        logger.info('--------------')
-#        logger.info('Renda Variável - Ganhos Líquidos ou perdas em operações comuns/day-'
-#                    'trade - Titular')
-#        losses = [0.0] * 12
-#        for year in self.stocks:
-#
+    def losses(self):
+        logger.info('--------------')
+        logger.info('RENDA VARIÁVEL - GANHOS LÍQUIDOS OU PERDAS EM OPERAÇÕES COMUNS/DAY-'
+                    'TRADE - TITULAR')
+        for month_number in range(12):
+            loss = 0.0
+            for stock in self.stocks:
+                # even though it will mostly be 0.0, I'd rather not accumulate error
+                # doing floating point operations
+                month = stock.months[month_number]
+                if month.has_loss:
+                    loss += month.loss
+            logger.info('%s Mercado à Vista %s', month_name[month_number], round(loss, 2))

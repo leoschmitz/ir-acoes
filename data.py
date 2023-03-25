@@ -51,6 +51,8 @@ class MonthlyBucket:
 @dataclass
 class Monthly:
     month: int
+    has_loss: bool = False
+    loss: float = 0.0
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
 
@@ -102,6 +104,9 @@ class YearOperations:
                 result
             )
             if result < 0.0:
+                # its generally unsafe to check for false using 0.0
+                month.has_loss = True
+                month.loss = result
                 self.accum_loss += result
             else:
                 self.tax_free_profit += result
