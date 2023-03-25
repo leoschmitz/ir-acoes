@@ -73,3 +73,22 @@ class Report:
                 year.year,
                 year.accumulated_quantity() * year.accumulated_average()
             )
+
+    def profit(self):
+        logger.info('--------------')
+        logger.info('RENDIMENTOS ISENTOS E NÃO TRIBUTÁVEIS')
+        logger.info('Código 20 - Ganhos líquidos em operações no mercado à vista de '
+                    'ações negociadas em bolsa de valores nas alienações realizadas até '
+                    'R$ 20.000,00 em cada mês, para o conjuto de ações')
+        tax_free = 0.0
+        for year in self.stocks:
+            tax_free += year.tax_free_profit
+        logger.info('Valor %s', round(tax_free, 2))
+
+#    def losses(self):
+#        logger.info('--------------')
+#        logger.info('Renda Variável - Ganhos Líquidos ou perdas em operações comuns/day-'
+#                    'trade - Titular')
+#        losses = [0.0] * 12
+#        for year in self.stocks:
+#

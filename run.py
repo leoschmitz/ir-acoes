@@ -22,6 +22,8 @@ def run():
     report.prepare()
     # prints 'Bens e Direitos'
     report.net_worth()
+    # prints 'Rendimentos isentos e não tributáveis'
+    report.profit()
 
 
 if __name__ == '__main__':
