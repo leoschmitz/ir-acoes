@@ -68,7 +68,10 @@ def _parse_b3_file(filename):
         assert op_type in ('VENDA', 'COMPRA')
 
         date = row[col.date]
-        date = datetime.strptime(row[col.date], '%d/%m/%Y').date()
+        if isinstance(date, str):
+            date = datetime.strptime(row[col.date], '%d/%m/%Y').date()
+        else:
+            date = date.date()
         # validate there is a single year in the Excel sheet
         if not year:
             year = date.year
