@@ -130,7 +130,7 @@ def save_output(stocks):
             'total': round(
                 stock.accumulated_quantity() * stock.accumulated_average(), 2
             ),
-            'preco-medio': round(stock.accumulated_average(), 6),
+            'preco-medio': round(stock.accumulated_average(), 9),
             'quantidade': stock.accumulated_quantity(),
         }
     pretty_json(stocks[0].year, content)

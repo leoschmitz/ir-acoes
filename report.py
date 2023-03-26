@@ -26,9 +26,11 @@ class Report:
             logger.info('Total operations %s', len(operations))
             year = YearOperations(stock, operations[0].date.year, input_, operations)
             logger.info(
-                'buy %s sell %s',
+                'buy %s sell %s remaining stock %s',
                 year.accumulated_average(),
-                year.accumulated_average(operation_type='SELL'))
+                year.accumulated_average(operation_type='SELL'),
+                year.accumulated_quantity(),
+            )
             self.stocks.append(year)
             year.calculate_loss_or_profit()
 

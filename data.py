@@ -96,12 +96,13 @@ class YearOperations:
             result = month.sell.total - buy_price
             assert month.sell.total < 20000.00  # TODO issue #2
             logger.info(
-                'On %s sell_ops %s, buy price %s sold total %s diff %s',
+                'On %s sell quantity %s remains %s, buy price %s sold total %s diff %s',
                 month_name[month_number+1],
                 month.sell.quantity,
-                buy_price,
-                month.sell.total,
-                result
+                self.accumulated_quantity(month=month_number+1),
+                round(buy_price, 5),
+                round(month.sell.total, 5),
+                round(result, 5),
             )
             if result < 0.0:
                 # its generally unsafe to check for false using 0.0
