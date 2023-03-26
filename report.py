@@ -65,7 +65,7 @@ class Report:
                 '%s - %s ACOES - PRECO MEDIO %s',
                 year.stock,
                 year.accumulated_quantity(),
-                year.accumulated_average(),
+                round(year.accumulated_average(), 5),
             )
 
             logger.info(
