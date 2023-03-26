@@ -107,3 +107,30 @@ def load_b3_file():
     assert len(xlsx_filenames) == 1
 
     return _parse_b3_file(xlsx_filenames[0])
+
+
+def pretty_json(year: int, content: dict):
+    dump_args = {
+        'sort_keys': True,
+        'indent': 4,
+        'ensure_ascii': False,
+    }
+    with open(f'posicoes-finais.{year}.json', 'w', encoding='utf-8') as outfile:
+        json.dump(content, outfile, **dump_args)
+        outfile.write('\n')
+
+
+def save_output(stocks):
+    content = {}
+    for stock in stocks:
+        if not stock.accumulated_quantity():
+            continue
+
+        content[stock.stock] = {
+            'total': round(
+                stock.accumulated_quantity() * stock.accumulated_average(), 2
+            ),
+            'preco-medio': round(stock.accumulated_average(), 6),
+            'quantidade': stock.accumulated_quantity(),
+        }
+    pretty_json(stocks[0].year, content)

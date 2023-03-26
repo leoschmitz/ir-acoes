@@ -8,6 +8,7 @@ logging.basicConfig(
 
 from file_handlers import load_input_file
 from file_handlers import load_b3_file
+from file_handlers import save_output
 from report import Report
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,8 @@ def run():
     report.profit()
     # prints 'Renda Variável - Ganhos Líquidos ou perdas em operações comuns/day-trade...'
     report.losses()
+
+    save_output(report.stocks)
 
 
 if __name__ == '__main__':
