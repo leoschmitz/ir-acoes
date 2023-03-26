@@ -6,8 +6,8 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 
-from file_loaders import load_input_file
-from file_loaders import load_b3_file
+from file_handlers import load_input_file
+from file_handlers import load_b3_file
 from report import Report
 
 logger = logging.getLogger(__name__)
