@@ -5,8 +5,8 @@ import json
 from datetime import datetime
 from enum import IntEnum
 from openpyxl import load_workbook
-from data import Buy
-from data import Sell
+from taxes.data import Buy
+from taxes.data import Sell
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ def _parse_b3_file(filename):
 def load_b3_file():
     xlsx_filenames = []
     logger.info('Loading B3 file')
-    for filename in os.listdir(os.path.dirname(__file__)):
+    for filename in os.listdir(os.path.dirname(__file__).replace('taxes', '')):
         if filename.endswith('xlsx'):
             xlsx_filenames.append(filename)
 

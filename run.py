@@ -6,10 +6,10 @@ logging.basicConfig(
     level=logging.DEBUG,
 )
 
-from file_handlers import load_input_file
-from file_handlers import load_b3_file
-from file_handlers import save_output
-from report import Report
+from taxes.file_handlers import load_input_file
+from taxes.file_handlers import load_b3_file
+from taxes.file_handlers import save_output
+from taxes.report import Report
 
 logger = logging.getLogger(__name__)
 

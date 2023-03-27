@@ -1,8 +1,8 @@
 import logging
 from calendar import month_name
 
-from data import Buy
-from data import YearOperations
+from taxes.data import Buy
+from taxes.data import YearOperations
 
 logger = logging.getLogger(__name__)
 
