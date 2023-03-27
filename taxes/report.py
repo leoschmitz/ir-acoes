@@ -39,7 +39,7 @@ class Report:
         year = self.stocks[0].year
         for stock in no_ops:
             logger.info('--------------')
-            logger.info('%s had no change this year %s', stock, year)
+            logger.info('%s had no change in %s', stock, year)
             self.stocks.append(YearOperations(
                 stock,
                 self.year,

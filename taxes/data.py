@@ -3,8 +3,6 @@ from calendar import month_name
 from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
-from typing import ClassVar
-from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +24,12 @@ class Buy(Operation):
 
 
 class Sell(Operation):
-    """Buy op"""
+    """Sell op"""
 
 
-@dataclass
 class MonthlyBucket:
-    ops: List[Operation] = field(default_factory=list)
+    def __init__(self):
+        self.ops = []
 
     @property
     def total(self):
