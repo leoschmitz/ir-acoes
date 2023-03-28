@@ -31,6 +31,12 @@ class MonthlyBucket:
     def __init__(self):
         self.ops = []
 
+    def add(self, op):
+        if self.ops:
+            assert isinstance(op, type(self.ops[0]))
+
+        self.ops.append(op)
+
     @property
     def total(self):
         sum_ = 0.0
@@ -47,12 +53,26 @@ class MonthlyBucket:
 
 
 @dataclass
-class Monthly:
+class MonthOperations:
     month: int
     has_loss: bool = False
     loss: float = 0.0
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
+    def __init__(self, month: int):
+        self.month = month
+        self.has_loss = False
+        self.loss = 0.0
+        self.buy = MonthlyBucket()
+        self.sell = MonthlyBucket()
+
+    def add_operation(self, op):
+        if isinstance(op, Buy):
+            self.buy.add(op)
+        elif isinstance(op, Sell):
+            self.sell.add(op)
+        else:
+            raise TypeError('Only buy or sell allowed')
 
 
 class YearOperations:
@@ -62,7 +82,7 @@ class YearOperations:
         self.accum_loss = 0.0
         self.tax_free_profit = 0.0
         self.operation_results = [0.0] * 12
-        self.months = [Monthly(i) for i in range(1, 13)]
+        self.months = [MonthOperations(i) for i in range(1, 13)]
 
         self.previous_total = 0.0
         self.previous_quantity = 0
@@ -72,10 +92,7 @@ class YearOperations:
 
         for operation in operations:
             index_month = operation.date.month - 1
-            if isinstance(operation, Buy):
-                self.months[index_month].buy.ops.append(operation)
-                continue
-            self.months[index_month].sell.ops.append(operation)
+            self.months[index_month].add_operation(operation)
 
         # validate there is buy/sell at the same month
         # this is a TODO for this script (issue #1)
