@@ -31,6 +31,9 @@ class MonthlyBucket:
     def __init__(self):
         self.ops = []
 
+    def __len__(self):
+        return len(self.ops)
+
     def add(self, op):
         if self.ops:
             assert isinstance(op, type(self.ops[0]))
@@ -66,7 +69,7 @@ class MonthOperations:
         self.buy = MonthlyBucket()
         self.sell = MonthlyBucket()
 
-    def add_operation(self, op):
+    def add(self, op):
         if isinstance(op, Buy):
             self.buy.add(op)
         elif isinstance(op, Sell):
@@ -82,7 +85,7 @@ class YearOperations:
         self.accum_loss = 0.0
         self.tax_free_profit = 0.0
         self.operation_results = [0.0] * 12
-        self.months = [MonthOperations(i) for i in range(1, 13)]
+        self.months = [MonthOperations(month=i) for i in range(1, 13)]
 
         self.previous_total = 0.0
         self.previous_quantity = 0
@@ -92,7 +95,7 @@ class YearOperations:
 
         for operation in operations:
             index_month = operation.date.month - 1
-            self.months[index_month].add_operation(operation)
+            self.months[index_month].add(operation)
 
         # validate there is buy/sell at the same month
         # this is a TODO for this script (issue #1)
