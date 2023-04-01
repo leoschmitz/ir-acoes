@@ -73,7 +73,7 @@ class Report:
                 year.year - 1,
                 year.previous_total,
                 year.year,
-                year.accumulated_quantity() * year.accumulated_average()
+                round(year.accumulated_quantity() * year.accumulated_average(), 2)
             )
 
     def profit(self):
