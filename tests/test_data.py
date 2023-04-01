@@ -129,6 +129,17 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.accum_loss, -100.0)
         self.assertTrue(year.months[_now().month].has_loss)
 
+    def test_calculate_loss_successfully_with_input(self):
+        year = data.YearOperations('STOC4', 2023, {
+            'total': 200.0,
+            'quantidade': 100,
+        }, [
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=_now(delta_month=1))
+        ])
+        year.calculate_loss_or_profit()
+        self.assertEqual(year.accum_loss, -100.0)
+        self.assertTrue(year.months[_now().month].has_loss)
+
     def test_calculate_profit_only_buy_ops(self):
         year = data.YearOperations('STOC4', 2023, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=_now()),
@@ -145,6 +156,16 @@ class TestYearOpsSingleStock(TestCase):
         year.calculate_loss_or_profit()
         self.assertEqual(year.tax_free_profit, 100.0)
 
+    def test_calculate_profit_successfully_with_input(self):
+        year = data.YearOperations('STOC4', 2023, {
+            'total': 100.0,
+            'quantidade': 100,
+        }, [
+            data.Sell(stock='STOC4', quantity=100, price=2.0, date=_now(delta_month=1))
+        ])
+        year.calculate_loss_or_profit()
+        self.assertEqual(year.tax_free_profit, 100.0)
+
     def test_getting_accumulated_total_no_op(self):
         year = data.YearOperations('STOC4', 2023, {}, [])
         self.assertFalse(year.accumulated_total('BUY'))
@@ -154,6 +175,16 @@ class TestYearOpsSingleStock(TestCase):
         year = data.YearOperations('STOC4', 2023, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=_now()),
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=_now(delta_month=1))
+        ])
+        self.assertEqual(year.accumulated_total('BUY'), 200.0)
+        self.assertEqual(year.accumulated_total('SELL'), 0.0)
+
+    def test_getting_accumulated_total_buy_with_input(self):
+        year = data.YearOperations('STOC4', 2023,  {
+            'total': 100.0,
+            'quantidade': 100,
+        }, [
+            data.Buy(stock='STOC4', quantity=100, price=1.0, date=_now()),
         ])
         self.assertEqual(year.accumulated_total('BUY'), 200.0)
         self.assertEqual(year.accumulated_total('SELL'), 0.0)
