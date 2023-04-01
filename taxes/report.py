@@ -40,12 +40,14 @@ class Report:
         for stock in no_ops:
             logger.info('--------------')
             logger.info('%s had no change in %s', stock, year)
-            self.stocks.append(YearOperations(
-                stock,
-                self.year,
-                self.current[stock],
-                [],
-            ))
+            self.stocks.append(
+                YearOperations(
+                    stock,
+                    self.year,
+                    self.current[stock],
+                    [],
+                )
+            )
 
         logger.info('--------------')
         for month in range(12):
@@ -53,7 +55,9 @@ class Report:
             for stock_ops in self.stocks:
                 sold += stock_ops.months[month].sell.total
 
-            logger.info('On %s you sold %s total', month_name[month+1], round(sold, 2))
+            logger.info(
+                'On %s you sold %s total', month_name[month + 1], round(sold, 2)
+            )
 
     def net_worth(self):
         logger.info('--------------')
@@ -73,15 +77,17 @@ class Report:
                 year.year - 1,
                 year.previous_total,
                 year.year,
-                round(year.accumulated_quantity() * year.accumulated_average(), 2)
+                round(year.accumulated_quantity() * year.accumulated_average(), 2),
             )
 
     def profit(self):
         logger.info('--------------')
         logger.info('RENDIMENTOS ISENTOS E NÃO TRIBUTÁVEIS')
-        logger.info('Código 20 - Ganhos líquidos em operações no mercado à vista de '
-                    'ações negociadas em bolsa de valores nas alienações realizadas até '
-                    'R$ 20.000,00 em cada mês, para o conjuto de ações')
+        logger.info(
+            'Código 20 - Ganhos líquidos em operações no mercado à vista de '
+            'ações negociadas em bolsa de valores nas alienações realizadas até '
+            'R$ 20.000,00 em cada mês, para o conjuto de ações'
+        )
         tax_free = 0.0
         for year in self.stocks:
             tax_free += year.tax_free_profit
@@ -89,8 +95,10 @@ class Report:
 
     def losses(self):
         logger.info('--------------')
-        logger.info('RENDA VARIÁVEL - GANHOS LÍQUIDOS OU PERDAS EM OPERAÇÕES COMUNS/DAY-'
-                    'TRADE - TITULAR')
+        logger.info(
+            'RENDA VARIÁVEL - GANHOS LÍQUIDOS OU PERDAS EM OPERAÇÕES COMUNS/DAY-'
+            'TRADE - TITULAR'
+        )
         for month_number in range(12):
             loss = 0.0
             for stock in self.stocks:
@@ -101,6 +109,6 @@ class Report:
                     loss += month.loss
             logger.info(
                 '%s Mercado à Vista %s',
-                month_name[month_number+1],
+                month_name[month_number + 1],
                 round(loss, 2),
             )

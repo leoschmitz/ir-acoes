@@ -61,6 +61,7 @@ class MonthOperations:
     loss: float = 0.0
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
+
     def __init__(self, month: int):
         self.month = month
         self.loss = 0.0
@@ -117,9 +118,9 @@ class YearOperations:
             assert month.sell.total < 20000.00  # TODO issue #2
             logger.info(
                 'On %s sell quantity %s remains %s, buy price %s sold total %s diff %s',
-                month_name[month_number+1],
+                month_name[month_number + 1],
                 month.sell.quantity,
-                self.accumulated_quantity(month=month_number+1),
+                self.accumulated_quantity(month=month_number + 1),
                 round(buy_price, 5),
                 round(month.sell.total, 5),
                 round(result, 5),
@@ -133,9 +134,7 @@ class YearOperations:
             self.operation_results[month_number] = result
 
         logger.info(
-            'Tax free profit: %s, loss: %s',
-            self.tax_free_profit,
-            self.accum_loss
+            'Tax free profit: %s, loss: %s', self.tax_free_profit, self.accum_loss
         )
 
     def accumulated_total(self, operation_type, month=12):
@@ -161,7 +160,4 @@ class YearOperations:
         if not quantity:
             return 0.0
 
-        return self.accumulated_total(
-            operation_type,
-            month=month
-        ) / quantity
+        return self.accumulated_total(operation_type, month=month) / quantity
