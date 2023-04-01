@@ -1,7 +1,6 @@
 import logging
 from calendar import month_name
 from dataclasses import dataclass
-from dataclasses import field
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -55,13 +54,7 @@ class MonthlyBucket:
         return sum_
 
 
-@dataclass
 class MonthOperations:
-    month: int
-    loss: float = 0.0
-    buy: MonthlyBucket = field(default_factory=MonthlyBucket)
-    sell: MonthlyBucket = field(default_factory=MonthlyBucket)
-
     def __init__(self, month: int):
         self.month = month
         self.loss = 0.0
