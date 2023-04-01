@@ -58,16 +58,18 @@ class MonthlyBucket:
 @dataclass
 class MonthOperations:
     month: int
-    has_loss: bool = False
     loss: float = 0.0
     buy: MonthlyBucket = field(default_factory=MonthlyBucket)
     sell: MonthlyBucket = field(default_factory=MonthlyBucket)
     def __init__(self, month: int):
         self.month = month
-        self.has_loss = False
         self.loss = 0.0
         self.buy = MonthlyBucket()
         self.sell = MonthlyBucket()
+
+    @property
+    def has_loss(self):
+        return self.loss < 0.0
 
     def add(self, op):
         if isinstance(op, Buy):
@@ -123,8 +125,6 @@ class YearOperations:
                 round(result, 5),
             )
             if result < 0.0:
-                # its generally unsafe to check for false using 0.0
-                month.has_loss = True
                 month.loss = result
                 self.accum_loss += result
             else:

@@ -109,6 +109,7 @@ class TestYearOpsSingleStock(TestCase):
         ])
         year.calculate_loss_or_profit()
         self.assertEqual(year.accum_loss, 0.0)
+        self.assertFalse(year.months[_now().month].has_loss)
 
     def test_calculate_loss_with_profit(self):
         year = data.YearOperations('STOC4', 2023, {}, [
@@ -117,6 +118,7 @@ class TestYearOpsSingleStock(TestCase):
         ])
         year.calculate_loss_or_profit()
         self.assertEqual(year.accum_loss, 0.0)
+        self.assertFalse(year.months[_now().month].has_loss)
 
     def test_calculate_loss_successfully(self):
         year = data.YearOperations('STOC4', 2023, {}, [
@@ -125,6 +127,7 @@ class TestYearOpsSingleStock(TestCase):
         ])
         year.calculate_loss_or_profit()
         self.assertEqual(year.accum_loss, -100.0)
+        self.assertTrue(year.months[_now().month].has_loss)
 
     def test_calculate_profit_only_buy_ops(self):
         year = data.YearOperations('STOC4', 2023, {}, [
