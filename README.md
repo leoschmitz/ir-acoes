@@ -2,7 +2,7 @@
 
 This is my personal tax calculator for stocks. It only makes sense for **residents of Brazil**. 
 
-# Calculadora de imposto de renda (ações)
+# 🚧 Calculadora de imposto de renda (ações) 🚧
 
 Scripts para ajudar no cálculo do Imposto de Renda.
 
