@@ -139,7 +139,7 @@ class YearOperations:
         )
 
     def accumulated_total(self, operation_type, month=12):
-        sum_ = self.previous_total
+        sum_ = self.previous_total if operation_type == 'BUY' else 0.0
         for month in self.months[:month]:
             sum_ += month.buy.total if operation_type == 'BUY' else month.sell.total
         return sum_
