@@ -93,6 +93,15 @@ class TestYearOpsSingleStock(TestCase):
                 data.Sell(stock='STOC4', quantity=100, price=1.0, date=_now())
             ])
 
+    # issue #2 will fix this
+    def test_sell_more_than_20k_in_a_month(self):
+        year = data.YearOperations('STOC4', 2023, {}, [
+            data.Buy(stock='STOC4', quantity=1, price=20000.0, date=_now()),
+            data.Sell(stock='STOC4', quantity=1, price=20000.01, date=_now(delta_month=1))
+        ])
+        with self.assertRaises(AssertionError):
+            year.calculate_loss_or_profit()
+
     def test_calculate_loss_only_buy_ops(self):
         year = data.YearOperations('STOC4', 2023, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=_now()),
