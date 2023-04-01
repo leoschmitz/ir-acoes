@@ -207,6 +207,49 @@ class TestYearOpsSingleStock(TestCase):
         year = data.YearOperations('STOC4', YEAR, {
             'total': 100.0,
             'quantidade': 200,
-        }, [])
-        self.assertEqual(year.accumulated_quantity(), 200)
+        }, [
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=NOW),
+            data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB),
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=date(day=1, month=3, year=YEAR)),
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=date(day=1, month=4, year=YEAR)),
+        ])
         self.assertEqual(year.accumulated_quantity(month=0), 200)
+        self.assertEqual(year.accumulated_quantity(month=1), 100)
+        self.assertEqual(year.accumulated_quantity(month=2), 200)
+        self.assertEqual(year.accumulated_quantity(month=3), 100)
+        self.assertEqual(year.accumulated_quantity(), 0)
+
+    def test_getting_accumulated_quantity_buy_or_sell_successfully(self):
+        year = data.YearOperations('STOC4', YEAR, {
+            'total': 100.0,
+            'quantidade': 200,
+        }, [
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=NOW),
+            data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB),
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=date(day=1, month=3, year=YEAR)),
+            data.Sell(stock='STOC4', quantity=100, price=1.0, date=date(day=1, month=4, year=YEAR)),
+        ])
+
+        self.assertEqual(year.accumulated_quantity(operation_type='BUY'), 300)
+        self.assertEqual(year.accumulated_quantity(operation_type='SELL'), 300)
+
+    def test_getting_acumulated_average_empty_class(self):
+        year = data.YearOperations('STOC4', YEAR, {}, [])
+        self.assertFalse(year.accumulated_average())
+
+    def test_getting_acumulated_average_input_only(self):
+        year = data.YearOperations('STOC4', YEAR, {
+            'total': 100.0,
+            'quantidade': 100,
+        }, [])
+        self.assertEqual(year.accumulated_average(), 1.0)
+
+    def test_getting_accumulated_average_successfully(self):
+        year = data.YearOperations('STOC4', YEAR, {
+            'total': 100.0,
+            'quantidade': 200,
+        }, [
+            data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB),
+            data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB),
+        ])
+        self.assertEqual(year.accumulated_average(), 0.75)
