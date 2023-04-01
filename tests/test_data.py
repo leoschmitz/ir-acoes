@@ -199,3 +199,15 @@ class TestYearOpsSingleStock(TestCase):
         ])
         self.assertEqual(year.accumulated_total('BUY'), 100.0)
         self.assertEqual(year.accumulated_total('SELL'), 200.0)
+
+    def test_getting_acumulated_quantity_empty_class(self):
+        year = data.YearOperations('STOC4', 2023, {}, [])
+        self.assertFalse(year.accumulated_quantity())
+
+    def test_getting_acumulated_quantity_empty_input_only(self):
+        year = data.YearOperations('STOC4', 2023, {
+            'total': 100.0,
+            'quantidade': 200,
+        }, [])
+        self.assertEqual(year.accumulated_quantity(), 200)
+        self.assertEqual(year.accumulated_quantity(month=0), 200)
