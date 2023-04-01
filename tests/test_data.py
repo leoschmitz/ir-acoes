@@ -3,9 +3,9 @@ from unittest import TestCase
 
 from taxes import data
 
-
-NOW = date(day=1, month=1, year=2023)
-FEB = date(day=1, month=2, year=2023)
+YEAR = 2023
+NOW = date(day=1, month=1, year=YEAR)
+FEB = date(day=1, month=2, year=YEAR)
 
 
 class TestOperation(TestCase):
@@ -79,14 +79,14 @@ class TestYearOpsSingleStock(TestCase):
     # issue #1 will fix this
     def test_same_month_buy_sell(self):
         with self.assertRaises(AssertionError):
-            data.YearOperations('STOC4', 2023, {}, [
+            data.YearOperations('STOC4', YEAR, {}, [
                 data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
                 data.Sell(stock='STOC4', quantity=100, price=1.0, date=NOW)
             ])
 
     # issue #2 will fix this
     def test_sell_more_than_20k_in_a_month(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=1, price=20000.0, date=NOW),
             data.Sell(stock='STOC4', quantity=1, price=20000.01, date=FEB)
         ])
@@ -94,7 +94,7 @@ class TestYearOpsSingleStock(TestCase):
             year.calculate_loss_or_profit()
 
     def test_calculate_loss_only_buy_ops(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB)
         ])
@@ -103,7 +103,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertFalse(year.months[NOW.month].has_loss)
 
     def test_calculate_loss_with_profit(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
             data.Sell(stock='STOC4', quantity=100, price=2.0, date=FEB)
         ])
@@ -112,7 +112,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertFalse(year.months[NOW.month].has_loss)
 
     def test_calculate_loss_successfully(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=2.0, date=NOW),
             data.Sell(stock='STOC4', quantity=100, price=1.0, date=FEB)
         ])
@@ -121,7 +121,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertTrue(year.months[NOW.month].has_loss)
 
     def test_calculate_loss_successfully_with_input(self):
-        year = data.YearOperations('STOC4', 2023, {
+        year = data.YearOperations('STOC4', YEAR, {
             'total': 200.0,
             'quantidade': 100,
         }, [
@@ -132,7 +132,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertTrue(year.months[NOW.month].has_loss)
 
     def test_calculate_profit_only_buy_ops(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB)
         ])
@@ -140,7 +140,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.tax_free_profit, 0.0)
 
     def test_calculate_profit_successfully(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
             data.Sell(stock='STOC4', quantity=100, price=2.0, date=FEB)
         ])
@@ -148,7 +148,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.tax_free_profit, 100.0)
 
     def test_calculate_profit_successfully_with_input(self):
-        year = data.YearOperations('STOC4', 2023, {
+        year = data.YearOperations('STOC4', YEAR, {
             'total': 100.0,
             'quantidade': 100,
         }, [
@@ -158,12 +158,12 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.tax_free_profit, 100.0)
 
     def test_getting_accumulated_total_no_op(self):
-        year = data.YearOperations('STOC4', 2023, {}, [])
+        year = data.YearOperations('STOC4', YEAR, {}, [])
         self.assertFalse(year.accumulated_total('BUY'))
         self.assertFalse(year.accumulated_total('SELL'))
 
     def test_getting_accumulated_total_buy_only(self):
-        year = data.YearOperations('STOC4', 2023, {}, [
+        year = data.YearOperations('STOC4', YEAR, {}, [
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=NOW),
             data.Buy(stock='STOC4', quantity=100, price=1.0, date=FEB)
         ])
@@ -171,7 +171,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.accumulated_total('SELL'), 0.0)
 
     def test_getting_accumulated_total_buy_with_input(self):
-        year = data.YearOperations('STOC4', 2023,  {
+        year = data.YearOperations('STOC4', YEAR,  {
             'total': 100.0,
             'quantidade': 100,
         }, [
@@ -181,7 +181,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.accumulated_total('SELL'), 0.0)
 
     def test_getting_accumulated_total_sell_only(self):
-        year = data.YearOperations('STOC4', 2023, {
+        year = data.YearOperations('STOC4', YEAR, {
             'total': 100.0,
             'quantidade': 200,
         }, [
@@ -192,11 +192,11 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.accumulated_total('SELL'), 200.0)
 
     def test_getting_acumulated_quantity_empty_class(self):
-        year = data.YearOperations('STOC4', 2023, {}, [])
+        year = data.YearOperations('STOC4', YEAR, {}, [])
         self.assertFalse(year.accumulated_quantity())
 
     def test_getting_acumulated_quantity_input_only(self):
-        year = data.YearOperations('STOC4', 2023, {
+        year = data.YearOperations('STOC4', YEAR, {
             'total': 100.0,
             'quantidade': 200,
         }, [])
@@ -204,7 +204,7 @@ class TestYearOpsSingleStock(TestCase):
         self.assertEqual(year.accumulated_quantity(month=0), 200)
 
     def test_getting_acumulated_quantity_successfully(self):
-        year = data.YearOperations('STOC4', 2023, {
+        year = data.YearOperations('STOC4', YEAR, {
             'total': 100.0,
             'quantidade': 200,
         }, [])
