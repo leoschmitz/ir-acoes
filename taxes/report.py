@@ -89,8 +89,13 @@ class Report:
             'R$ 20.000,00 em cada mês, para o conjuto de ações'
         )
         tax_free = 0.0
-        for year in self.stocks:
-            tax_free += year.tax_free_profit
+        for month_number in range(12):
+            total = 0.0
+            for stock in self.stocks:
+                month = stock.months[month_number]
+                total += month.loss + month.profit
+            if total > 0.0:
+                tax_free += total
         logger.info('Valor %s', round(tax_free, 2))
 
     def losses(self):
@@ -105,8 +110,7 @@ class Report:
                 # even though it will mostly be 0.0, I'd rather not accumulate error
                 # doing floating point operations
                 month = stock.months[month_number]
-                if month.has_loss:
-                    loss += month.loss
+                loss += month.loss + month.profit
             logger.info(
                 '%s Mercado à Vista %s',
                 month_name[month_number + 1],

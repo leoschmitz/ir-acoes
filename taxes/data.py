@@ -58,12 +58,13 @@ class MonthOperations:
     def __init__(self, month: int):
         self.month = month
         self.loss = 0.0
+        self.profit = 0.0
         self.buy = MonthlyBucket()
         self.sell = MonthlyBucket()
 
     @property
     def has_loss(self):
-        return self.loss < 0.0
+        return self.loss + self.profit < 0.0
 
     def add(self, op):
         if isinstance(op, Buy):
@@ -122,6 +123,7 @@ class YearOperations:
                 month.loss = result
                 self.accum_loss += result
             else:
+                month.profit = result
                 self.tax_free_profit += result
 
             self.operation_results[month_number] = result
