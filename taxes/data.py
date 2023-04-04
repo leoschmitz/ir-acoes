@@ -105,7 +105,7 @@ class YearOperations:
                 continue
             # this will start with zero, which is the correct first month (previous)
             buy_price = (
-                self.accumulated_average('BUY', month_number) * month.sell.quantity
+                self.accumulated_average(month=month_number) * month.sell.quantity
             )
 
             result = month.sell.total - buy_price
@@ -150,9 +150,37 @@ class YearOperations:
                 sum_ += month.buy.quantity - month.sell.quantity
         return sum_
 
-    def accumulated_average(self, operation_type='BUY', month=12):
-        quantity = self.accumulated_quantity(operation_type=operation_type, month=month)
-        if not quantity:
-            return 0.0
+    def accumulated_average(self, operation_type='', month=12):
+        average = 0.0
+        if operation_type in ('BUY', 'SELL'):
+            quantity = self.accumulated_quantity(
+                operation_type=operation_type, month=month
+            )
+            if not quantity:
+                return average
 
-        return self.accumulated_total(operation_type, month=month) / quantity
+            return self.accumulated_total(operation_type, month=month) / quantity
+
+        result = 0.0
+        accum_total = self.previous_total
+        accum_quantity = self.previous_quantity
+        for month in self.months[:month]:
+            # issue #1 needs to account for buy & sell in the same month
+            if month.buy.quantity:
+                accum_total += month.buy.total
+                accum_quantity += month.buy.quantity
+
+            # issue #1 as well
+            if month.sell.quantity:
+                average = accum_total / accum_quantity
+                accum_quantity -= month.sell.quantity
+                accum_total = accum_quantity * average
+
+            if not accum_quantity:
+                accum_total = 0.0
+                result = 0.0
+
+        if not accum_quantity:
+            return result
+
+        return accum_total / accum_quantity
