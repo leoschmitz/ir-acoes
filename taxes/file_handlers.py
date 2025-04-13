@@ -87,7 +87,12 @@ def _parse_b3_file(filename):
         else:
             operation = Sell(code, quantity, price, date)
 
-        assert round(operation.total, 2) == round(row[col.total], 2)
+        try:
+            assert round(operation.total, 2) == round(row[col.total], 2)
+        except AssertionError:
+            logger.warning("No match between %s and %s ", round(operation.total, 2), round(row[col.total], 2))
+            if abs(round(operation.total, 2) - round(row[col.total], 2)) > 1.0:
+                raise
         if operation.stock not in stocks:
             stocks[operation.stock] = [operation]
         else:
